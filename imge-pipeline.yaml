@@ -2,8 +2,6 @@ trigger:
 - main
 
 variables: 
-  optionalCompPack: $(optionalCompositePackages)
-  optionalDirPack: $(optionalDirectPackages)
   serviceConn: $(serviceConnection)
   serviceConnAcr: $(serviceConnectionAcrinput)     #h Azure Container (Docker) Registry service connection
   repository: $(RepositoryName)                         # Repository in ACR that holds the container images
@@ -14,9 +12,9 @@ variables:
 
 resources:
   repositories:
-    - repository: ah-tech-shared-containerized-devopsagent-image
-      name: RoyalAholdDelhaize/ah-tech-shared-containerized-devopsagent-image
-      endpoint: RoyalAholdDelhaize
+    - repository: registry_image
+      name: registry_image
+      endpoint: tubai2023
       type: github
       ref: main
 
@@ -31,12 +29,10 @@ stages:
       vmImage: 'ubuntu-latest'
            
     steps:
-      - checkout: ah-tech-shared-containerized-devopsagent-image
+      - checkout: registry_image
 
-      - template: pipelines/az-pipelines-agent.yml@ah-tech-shared-containerized-devopsagent-image
+      - template: pipelines/az-pipelines-agent.yml@registry_image
         parameters:
-          optionalCompositePackage : $(optionalCompPack)
-          optionalDirectPackage: $(optionalDirPack)
           serviceConnectionAcr: $(serviceConnAcr)     
           serviceConnection: $(serviceConn)
           repository: $(repository)                          
