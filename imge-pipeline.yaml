@@ -1,0 +1,45 @@
+trigger:
+- main
+
+variables: 
+  optionalCompPack: $(optionalCompositePackages)
+  optionalDirPack: $(optionalDirectPackages)
+  serviceConn: $(serviceConnection)
+  serviceConnAcr: $(serviceConnectionAcrinput)     # Azure Container (Docker) Registry service connection
+  repository: $(RepositoryName)                         # Repository in ACR that holds the container images
+  imgtag: $(imageTag)                       # Container image tag value
+  acr: $(AcrName) 
+  image_name: '$(acr).azurecr.io/$(repository)'
+
+
+resources:
+  repositories:
+    - repository: ah-tech-shared-containerized-devopsagent-image
+      name: RoyalAholdDelhaize/ah-tech-shared-containerized-devopsagent-image
+      endpoint: RoyalAholdDelhaize
+      type: github
+      ref: main
+
+stages:
+
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+           
+    steps:
+      - checkout: ah-tech-shared-containerized-devopsagent-image
+
+      - template: pipelines/az-pipelines-agent.yml@ah-tech-shared-containerized-devopsagent-image
+        parameters:
+          optionalCompositePackage : $(optionalCompPack)
+          optionalDirectPackage: $(optionalDirPack)
+          serviceConnectionAcr: $(serviceConnAcr)     
+          serviceConnection: $(serviceConn)
+          repository: $(repository)                          
+          imagetag: $(imgtag)
+          acr: $(acr) 
+          image_name: $(image_name)
