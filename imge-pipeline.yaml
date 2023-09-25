@@ -5,7 +5,7 @@ variables:
   optionalCompPack: $(optionalCompositePackages)
   optionalDirPack: $(optionalDirectPackages)
   serviceConn: $(serviceConnection)
-  serviceConnAcr: $(serviceConnectionAcrinput)     # Azure Container (Docker) Registry service connection
+  serviceConnAcr: $(serviceConnectionAcrinput)     #h Azure Container (Docker) Registry service connection
   repository: $(RepositoryName)                         # Repository in ACR that holds the container images
   imgtag: $(imageTag)                       # Container image tag value
   acr: $(AcrName) 
